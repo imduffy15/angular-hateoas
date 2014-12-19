@@ -94,17 +94,6 @@ angular.module("hateoas", ["ngResource"])
 
 			$get: ["$injector", function ($injector) {
 
-				var arrayToObject = function (keyItem, valueItem, array) {
-					var obj = {};
-					angular.forEach(array, function (item, index) {
-						if (item[keyItem] && item[valueItem]) {
-							obj[item[keyItem]] = item[valueItem];
-						}
-					});
-
-					return obj;
-				};
-
 				var resource = function (linkName, bindings, httpMethods) {
 					if (linkName in this[linksKey]) {
 						return $injector.get("$resource")(this[linksKey][linkName], bindings, httpMethods || globalHttpMethods);
@@ -114,13 +103,6 @@ angular.module("hateoas", ["ngResource"])
 				};
 
 				var HateoasInterface = function (data) {
-
-					// if links are present, consume object and convert links
-					if (data[linksKey]) {
-						var links = {};
-						links[linksKey] = arrayToObject("rel", "href", data[linksKey]);
-						data = angular.extend(this, data, links, { resource: resource });
-					}
 
 					// recursively consume all contained arrays or objects with links
 					angular.forEach(data, function (value, key) {
