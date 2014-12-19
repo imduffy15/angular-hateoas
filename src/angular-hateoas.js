@@ -104,6 +104,13 @@ angular.module("hateoas", ["ngResource"])
 
 				var HateoasInterface = function (data) {
 
+					// if links are present, consume object and convert links
+					if (data[linksKey]) {
+						var links = {};
+						// links[linksKey] = arrayToObject("rel", "href", data[linksKey]);
+						data = angular.extend(this, data, links, { resource: resource });
+					}
+
 					// recursively consume all contained arrays or objects with links
 					angular.forEach(data, function (value, key) {
 						if (key !== linksKey && angular.isObject(value) && (angular.isArray(value) || value[linksKey])) {
