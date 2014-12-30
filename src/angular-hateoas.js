@@ -96,7 +96,7 @@ angular.module("hateoas", ["ngResource"])
 
 				var resource = function (linkName, bindings, httpMethods) {
 					if (linkName in this[linksKey]) {
-						return $injector.get("$resource")(this[linksKey][linkName], bindings, httpMethods || globalHttpMethods);
+						return $injector.get("$resource")(this[linksKey][linkName] + "/:id", bindings, httpMethods || globalHttpMethods);
 					} else {
 						throw "Link '" + linkName + "' is not present in object.";
 					}
